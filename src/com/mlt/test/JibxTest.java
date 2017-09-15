@@ -13,6 +13,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mlt.entity.Account;
+import com.mlt.entity.Birthday;
+
 public class JibxTest {
     private IBindingFactory factory = null;
     

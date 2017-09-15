@@ -1,4 +1,4 @@
-package com.mlt.test;
+package com.mlt.entity;
 
 public class Account {
     private int id;

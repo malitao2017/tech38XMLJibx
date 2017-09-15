@@ -4,3 +4,19 @@ Jibx 处理XML
 http://www.cnblogs.com/hoojo/archive/2011/04/27/2030205.html
 
 作用： 转换Java到XML、转换XML到Java
+
+
+第一步：生成build.xml文件，即 bind.xml和schema
+
+生成Account的文档
+官方有提高工具类可以用。 org.jibx.binding.generator.BindGen或org.jibx.binding.BindingGenerator这两个类都可以，用法如下：
+首先用dos进入当前工程目录，然后执行命令：E:\Study\WebHttpUtils>java -cp bin;lib/jibx-tools.jar;lib/log4j-1.2.16.jar org.jibx.binding.generator.BindGen -b bind.xml com.hoo.entity.Account
+
+在项目目录下打开：
+D:\work\eclipse\workspace-jee\tech38XMLJibx>
+java -cp bin;lib/jibx-tools.jar;lib/log4j-1.2.16.jar org.jibx.binding.generator.BindGen -b bind.xml com.mlt.entity.Account
+
+上面的java 是运行某个程序 –cp是依赖的classpath路径的jar、zip等文件，-b 是输出文件名称，是BindGen类的参数。这样会在当前工程目录中生成bind.xml和entity.xsd文件。先看看这2个文件
+
+第二步：
+
