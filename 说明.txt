@@ -1,0 +1,6 @@
+
+参考：
+Jibx 处理XML
+http://www.cnblogs.com/hoojo/archive/2011/04/27/2030205.html
+
+作用： 转换Java到XML、转换XML到Java
