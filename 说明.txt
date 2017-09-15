@@ -19,4 +19,10 @@ java -cp bin;lib/jibx-tools.jar;lib/log4j-1.2.16.jar org.jibx.binding.generator.
 上面的java 是运行某个程序 –cp是依赖的classpath路径的jar、zip等文件，-b 是输出文件名称，是BindGen类的参数。这样会在当前工程目录中生成bind.xml和entity.xsd文件。先看看这2个文件
 
 第二步：
+上面最重要的就是bind.xml文件了，下面编译的时候需要这个文件。Xsd文件可以根据这个文件的内容生成Java的Entity类代码。
+执行完命令后，没有错误就可以运行下面一段命令了。运行命令：
+E:\Study\WebHttpUtils>java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind.xml
 
+本机：
+D:\work\eclipse\workspace-jee\tech38XMLJibx>
+java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind.xml
