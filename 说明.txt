@@ -12,17 +12,48 @@ http://www.cnblogs.com/hoojo/archive/2011/04/27/2030205.html
 官方有提高工具类可以用。 org.jibx.binding.generator.BindGen或org.jibx.binding.BindingGenerator这两个类都可以，用法如下：
 首先用dos进入当前工程目录，然后执行命令：E:\Study\WebHttpUtils>java -cp bin;lib/jibx-tools.jar;lib/log4j-1.2.16.jar org.jibx.binding.generator.BindGen -b bind.xml com.hoo.entity.Account
 
-在项目目录下打开：
+在项目目录下打开： cmd
 D:\work\eclipse\workspace-jee\tech38XMLJibx>
 java -cp bin;lib/jibx-tools.jar;lib/log4j-1.2.16.jar org.jibx.binding.generator.BindGen -b bind.xml com.mlt.entity.Account
 
 上面的java 是运行某个程序 –cp是依赖的classpath路径的jar、zip等文件，-b 是输出文件名称，是BindGen类的参数。这样会在当前工程目录中生成bind.xml和entity.xsd文件。先看看这2个文件
 
-第二步：
+第二步：编译jbix，然后运行
 上面最重要的就是bind.xml文件了，下面编译的时候需要这个文件。Xsd文件可以根据这个文件的内容生成Java的Entity类代码。
 执行完命令后，没有错误就可以运行下面一段命令了。运行命令：
 E:\Study\WebHttpUtils>java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind.xml
 
-本机：
+本机：cmd
 D:\work\eclipse\workspace-jee\tech38XMLJibx>
 java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind.xml
+
+第三步：查看信息
+你还可以用命令来查看某个已经生成bind、schema文件的信息，如：
+java -cp bin;lib/jibx-run.jar org.jibx.runtime.PrintInfo -c com.hoo.entity.Account
+
+本机：cmd
+D:\work\eclipse\workspace-jee\tech38XMLJibx>
+java -cp bin;lib/jibx-run.jar org.jibx.runtime.PrintInfo -c com.mlt.entity.Account
+
+第四步：若出问题，解决方案
+注意，有时候会出现异常信息，如：java.lang.NoSuchFieldException: JiBX_bindingXXXX就要重复下面的命令就可以了。
+java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind.xml
+
+第五步：生成bind.xml，名称改为：bind_list.xml <转换带List集合属性的JavaBean>
+java -cp bin;lib/jibx-tools.jar;lib/log4j-1.2.16.jar org.jibx.binding.BindingGenerator -f bind.xml com.hoo.entity.ListBean
+
+本机：cmd
+D:\work\eclipse\workspace-jee\tech38XMLJibx>
+java -cp bin;lib/jibx-tools.jar;lib/log4j-1.2.16.jar org.jibx.binding.BindingGenerator -f bind_list.xml com.mlt.entity.ListBean
+
+第六步：运行Compile工具类  -- 之后运行 listBean2XML()方法 
+在运行前，一定要将最先前运行的Account那个类的bind.xml文件的内容加入到现在这个bind.xml中，因为ListBean依赖了Account这个类。
+java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind.xml
+
+本机cmd ,改为 bind_list.xml
+D:\work\eclipse\workspace-jee\tech38XMLJibx>
+java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind_list.xml
+
+
+
+
