@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.jibx.runtime.BindingDirectory;
@@ -16,8 +17,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.mlt.entity.Account;
+import com.mlt.entity.AccountArray;
 import com.mlt.entity.Birthday;
 import com.mlt.entity.ListBean;
+import com.mlt.entity.MapBean;
 
 public class JibxTest {
     private IBindingFactory factory = null;
@@ -93,8 +96,10 @@ public class JibxTest {
     }
     
     @Test
-    public void listBean2XML() {
-    	System.out.println("解析集合对象：在运行前，一定要将最先前运行的Account那个类的bind.xml文件的内容加入到现在这个bind.xml中，因为ListBean依赖了Account这个类。");
+    public void list2XML() {
+    	System.out.println("解析List集合");
+    	System.out.println("在运行前，一定要将最先前运行的Account那个类的bind.xml文件的内容加入到现在这个bind.xml中，因为ListBean依赖了Account这个类。");
+    	System.out.println("运行：java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind_list.xml");
         try {
             ListBean listBean = new ListBean();
             List<Account> list = new ArrayList<Account>();
@@ -128,5 +133,82 @@ public class JibxTest {
             e.printStackTrace();
         }
     }
+    
+//    @Test
+    public void array2XML(){
+    	System.out.println("解析数组");
+    	System.out.println("在运行前，cmd：java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind_array.xml。");
+    	try {
+            Account[] acc = new Account[2];
+            acc[0] = bean;
+            bean = new Account();
+            bean.setName("tom");
+            bean.setId(223);
+            acc[1] = bean;
+            AccountArray array = new AccountArray();
+            array.setAccounts(acc);
+            
+            
+            writer = new StringWriter();
+            factory = BindingDirectory.getFactory(AccountArray.class);
+            // marshal 编组
+            IMarshallingContext mctx = factory.createMarshallingContext();
+            mctx.setIndent(2);
+            mctx.marshalDocument(array, "UTF-8", null, writer);
+            fail(writer);
+            
+            reader = new StringReader(writer.toString());
+            //unmarshal 解组
+            IUnmarshallingContext uctx = factory.createUnmarshallingContext();
+            array = (AccountArray) uctx.unmarshalDocument(reader, null);
+            
+            fail(array.getAccounts()[0]);
+            fail(array.getAccounts()[1]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+//    @Test
+    public void map2XML() {
+    	System.out.println("解析map");
+    	System.out.println("在运行前，cmd： java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind_map.xml ");
+        try {
+            MapBean mapBean = new MapBean();
+            HashMap<String, Account> map = new HashMap<String, Account>();
+            map.put("No1", bean);
+            
+            bean = new Account();
+            bean.setAddress("china");
+            bean.setEmail("tom@125.com");
+            bean.setId(2);
+            bean.setName("tom");
+            Birthday day = new Birthday("2010-11-22");
+            bean.setBirthday(day);
+            
+            map.put("No2", bean);
+            mapBean.setMap(map);
+            
+            factory = BindingDirectory.getFactory(MapBean.class);
+            writer = new StringWriter();
+            // marshal 编组
+            IMarshallingContext mctx = factory.createMarshallingContext();
+            mctx.setIndent(2);
+            mctx.marshalDocument(mapBean, "UTF-8", null, writer);
+            fail(writer);
+            
+            reader = new StringReader(writer.toString());
+            //unmarshal 解组
+            IUnmarshallingContext uctx = factory.createUnmarshallingContext();
+            mapBean = (MapBean) uctx.unmarshalDocument(reader, null);
+            
+            fail(mapBean.getMap());
+            fail(mapBean.getMap().get("No1"));
+            fail(mapBean.getMap().get("No2"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     
 }

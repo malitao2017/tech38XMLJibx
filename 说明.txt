@@ -8,9 +8,9 @@ http://www.cnblogs.com/hoojo/archive/2011/04/27/2030205.html
 
 第一步：生成build.xml文件，即 bind.xml和schema
 
-生成Account的文档
-官方有提高工具类可以用。 org.jibx.binding.generator.BindGen或org.jibx.binding.BindingGenerator这两个类都可以，用法如下：
-首先用dos进入当前工程目录，然后执行命令：E:\Study\WebHttpUtils>java -cp bin;lib/jibx-tools.jar;lib/log4j-1.2.16.jar org.jibx.binding.generator.BindGen -b bind.xml com.hoo.entity.Account
+	生成Account的文档
+	官方有提高工具类可以用。 org.jibx.binding.generator.BindGen或org.jibx.binding.BindingGenerator这两个类都可以，用法如下：
+	首先用dos进入当前工程目录，然后执行命令：E:\Study\WebHttpUtils>java -cp bin;lib/jibx-tools.jar;lib/log4j-1.2.16.jar org.jibx.binding.generator.BindGen -b bind.xml com.hoo.entity.Account
 
 在项目目录下打开： cmd
 D:\work\eclipse\workspace-jee\tech38XMLJibx>
@@ -18,41 +18,86 @@ java -cp bin;lib/jibx-tools.jar;lib/log4j-1.2.16.jar org.jibx.binding.generator.
 
 上面的java 是运行某个程序 –cp是依赖的classpath路径的jar、zip等文件，-b 是输出文件名称，是BindGen类的参数。这样会在当前工程目录中生成bind.xml和entity.xsd文件。先看看这2个文件
 
-第二步：编译jbix，然后运行
-上面最重要的就是bind.xml文件了，下面编译的时候需要这个文件。Xsd文件可以根据这个文件的内容生成Java的Entity类代码。
-执行完命令后，没有错误就可以运行下面一段命令了。运行命令：
-E:\Study\WebHttpUtils>java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind.xml
 
-本机：cmd
+######################解析普通对象######################
+第二步：编译jbix，然后运行 
+	上面最重要的就是bind.xml文件了，下面编译的时候需要这个文件。Xsd文件可以根据这个文件的内容生成Java的Entity类代码。
+	执行完命令后，没有错误就可以运行下面一段命令了。运行命令：
+	E:\Study\WebHttpUtils>java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind.xml
+
+本机：cmd --之后在Java中运行 @TEST
 D:\work\eclipse\workspace-jee\tech38XMLJibx>
 java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind.xml
 
 第三步：查看信息
-你还可以用命令来查看某个已经生成bind、schema文件的信息，如：
-java -cp bin;lib/jibx-run.jar org.jibx.runtime.PrintInfo -c com.hoo.entity.Account
+	你还可以用命令来查看某个已经生成bind、schema文件的信息，如：
+	java -cp bin;lib/jibx-run.jar org.jibx.runtime.PrintInfo -c com.hoo.entity.Account
 
 本机：cmd
 D:\work\eclipse\workspace-jee\tech38XMLJibx>
 java -cp bin;lib/jibx-run.jar org.jibx.runtime.PrintInfo -c com.mlt.entity.Account
 
 第四步：若出问题，解决方案
-注意，有时候会出现异常信息，如：java.lang.NoSuchFieldException: JiBX_bindingXXXX就要重复下面的命令就可以了。
-java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind.xml
+	注意，有时候会出现异常信息，如：java.lang.NoSuchFieldException: JiBX_bindingXXXX就要重复下面的命令就可以了。
+	java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind.xml
 
-第五步：生成bind.xml，名称改为：bind_list.xml <转换带List集合属性的JavaBean>
-java -cp bin;lib/jibx-tools.jar;lib/log4j-1.2.16.jar org.jibx.binding.BindingGenerator -f bind.xml com.hoo.entity.ListBean
 
-本机：cmd
+######################解析List集合######################
+第一步：生成bind.xml，名称改为：bind_list.xml <转换带List集合属性的JavaBean>
+	参考：java -cp bin;lib/jibx-tools.jar;lib/log4j-1.2.16.jar org.jibx.binding.BindingGenerator -f bind.xml com.hoo.entity.ListBean
+
+本机：cmd 生成的是 bind_list.xml，
+
 D:\work\eclipse\workspace-jee\tech38XMLJibx>
 java -cp bin;lib/jibx-tools.jar;lib/log4j-1.2.16.jar org.jibx.binding.BindingGenerator -f bind_list.xml com.mlt.entity.ListBean
 
-第六步：运行Compile工具类  -- 之后运行 listBean2XML()方法 
-在运行前，一定要将最先前运行的Account那个类的bind.xml文件的内容加入到现在这个bind.xml中，因为ListBean依赖了Account这个类。
-java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind.xml
+	##注意现在已经生成完毕，不要再次运行否则会覆盖；此操作生成部分内容，要想不这么麻烦就参考下面的map，array等操作，具体的是在参数中加入对象 Account,
+	即：
+	java -cp bin;lib/jibx-tools.jar;lib/log4j-1.2.16.jar org.jibx.binding.BindingGenerator -f bind_list.xml com.mlt.entity.Account com.mlt.entity.ListBean
 
-本机cmd ,改为 bind_list.xml
+
+第二步：运行Compile工具类
+	在运行前，一定要将最先前运行的Account那个类的bind.xml文件的内容加入到现在这个bind.xml中，因为ListBean依赖了Account这个类。
+	java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind.xml
+
+本机：cmd  改为 bind_list.xml --之后在Java中运行 @TEST
 D:\work\eclipse\workspace-jee\tech38XMLJibx>
 java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind_list.xml
+
+遇到错误：
+org.jibx.runtime.JiBXException: Undefined prefix ns1
+解决：把bind.xml的单个对象的信息放进来就可以了，只是把一个头一个尾注释掉就行
+
+第三步：运行 list2XML()方法
+ 
+######################解析对象数组######################
+第一步：运行命令生成bind.xml文件，本机为 bind_array.xml
+D:\work\eclipse\workspace-jee\tech38XMLJibx>
+java -cp bin;lib/jibx-tools.jar;lib/log4j-1.2.16.jar org.jibx.binding.BindingGenerator -f bind_array.xml com.mlt.entity.Account com.mlt.entity.AccountArray
+
+第二步：编译
+D:\work\eclipse\workspace-jee\tech38XMLJibx>
+java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind_array.xml
+
+
+第三步：运行 array2XML()方法
+
+
+######################解析Map######################
+第一步：运行命令生成bind.xml文件，本机为 bind_map.xml
+##因为会涉及到修改问题，运行之后会覆盖原来的内容
+D:\work\eclipse\workspace-jee\tech38XMLJibx>
+java -cp bin;lib/jibx-tools.jar;lib/log4j-1.2.16.jar org.jibx.binding.BindingGenerator -f bind_map.xml com.mlt.entity.Account com.mlt.entity.MapBean
+
+运行后，会生产bind.xml；修改bind.xml内容如下：
+注意上面的MapBean的structure元素的内容是经过修改的。一定要带上marshaller或unmarshaller，不然无法转换HashMap的。
+创建工具类: HashMapper
+
+第二步：编译,运行Compile命令
+D:\work\eclipse\workspace-jee\tech38XMLJibx>
+java -cp bin;lib/jibx-bind.jar org.jibx.binding.Compile -v bind_map.xml
+
+第三步：运行 map2XML()方法
 
 
 
