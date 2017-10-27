@@ -1,6 +1,6 @@
 
 参考：
-Jibx 处理XML
+Jibx 处理XML 用于netty的http+xml协议开发
 http://www.cnblogs.com/hoojo/archive/2011/04/27/2030205.html
 
 作用： 转换Java到XML、转换XML到Java
